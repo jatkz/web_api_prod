@@ -1,5 +1,6 @@
 use tracing::{subscriber::set_global_default, Subscriber};
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
+use tracing_error::ErrorLayer;
 use tracing_log::LogTracer;
 use tracing_subscriber::fmt::MakeWriter;
 use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
@@ -19,7 +20,9 @@ where
     let subscriber = Registry::default()
         .with(env_filter)
         .with(JsonStorageLayer)
-        .with(formatting_layer);
+        .with(formatting_layer)
+        .with(ErrorLayer::default());
+
     subscriber
 }
 
