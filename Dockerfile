@@ -17,7 +17,6 @@ COPY . .
 ENV SQLX_OFFLINE true
 RUN cargo build --release --bin web_api_prod
 
-
 FROM debian:bullseye-slim as runtime
 WORKDIR /app
 RUN apt-get update -y \
@@ -29,4 +28,5 @@ RUN apt-get update -y \
 COPY --from=builder /app/target/release/web_api_prod web_api_prod
 COPY configuration configuration
 ENV APP_ENVIRONMENT production
+EXPOSE 8000
 ENTRYPOINT ["./web_api_prod"]

@@ -1,6 +1,6 @@
 use tracing::{subscriber::set_global_default, Subscriber};
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
-use tracing_error::ErrorLayer;
+// use tracing_error::ErrorLayer;
 use tracing_log::LogTracer;
 use tracing_subscriber::fmt::MakeWriter;
 use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
@@ -15,15 +15,13 @@ where
     Sink: for<'a> MakeWriter<'a> + Send + Sync + 'static,
 {
     // checks env RUST_LOG if not set than default to info level or above
-    let env_filter = EnvFilter::try_from_default_env().unwrap_or(EnvFilter::new(env_filter));
+    let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(env_filter));
     let formatting_layer = BunyanFormattingLayer::new(name, sink);
-    let subscriber = Registry::default()
+    Registry::default()
         .with(env_filter)
         .with(JsonStorageLayer)
         .with(formatting_layer)
-        .with(ErrorLayer::default());
-
-    subscriber
+        // .with(ErrorLayer::default());
 }
 
 // Set Logger to emit tracing
