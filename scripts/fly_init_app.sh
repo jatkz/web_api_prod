@@ -18,6 +18,7 @@ function check_database_exists(){
 if check_database_exists; then
     fly app launch
     fly pg attach $FLY_DB_APP --database-user $DB_USER --database-name $DB_NAME
+    # Scrap 
 else
     fly app launch
     # Scrap database information
